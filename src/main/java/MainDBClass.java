@@ -1,4 +1,5 @@
 
+import service.ContinentService;
 import service.CountryService;
 
 import java.sql.*;
@@ -56,6 +57,7 @@ public class MainDBClass {
     private static void choices() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         CountryService countryService = new CountryService();
+        ContinentService continentService = new ContinentService();
         if (choiceTwo!=0)
         if (choiceOne==1){
 
@@ -71,11 +73,11 @@ public class MainDBClass {
 
         } else if (choiceOne==2){
             switch (choiceTwo){
-                case 1:break;//TODO see All Continents
-                case 2:break;//TODO see One Continent By Id
-                case 3:break;//TODO add One new Continent
-                case 4:break;//TODO edit One Continent
-                case 5:break;//TODO delete One Continent
+                case 1:continentService.showAllContinents();break;//
+                case 2:continentService.showContinentById();break;//TODO see One Continent By Id
+                case 3:continentService.insertAContinent();break;//TODO add One new Continent
+                case 4:continentService.updateContinent();break;//TODO edit One Continent
+                case 5:continentService.deleteContinent();break;//TODO delete One Continent
             }
             System.out.println("We did a continent thing!");
 

@@ -1,12 +1,29 @@
 package model;
 
-public class Continent {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.List;
 
+@Entity
+public class Continent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    private List<Country> countryList;
 
-    public Continent(int id, String name) {
+    public Continent() {
+    }
+
+    public Continent(int id ,String name) {
         this.id = id;
+        this.name = name;
+        ;
+    }
+
+    public Continent(String name) {
         this.name = name;
     }
 

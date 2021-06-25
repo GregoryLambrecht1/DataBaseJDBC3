@@ -1,18 +1,19 @@
 package data;
 
 import model.Continent;
-import model.Country;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import java.sql.*;
+
 import java.util.List;
 
 public class ContinentDAO {
 
-    private Connection connection;
+    private EntityManagerFactory connection;
 
     public ContinentDAO() throws SQLException {
         connection = ConnectionFactory.getConnection();
@@ -21,37 +22,45 @@ public class ContinentDAO {
     //TODO: create update, delete and Insert methods
 
     public Continent getContinentById(int id) throws SQLException {
-        Statement statement = connection.createStatement();
-        String select = "SELECT * FROM Continent WHERE id = "+id+";";
-        ResultSet resultSet = statement.executeQuery(select);
-        Continent continent = null;
-        while (resultSet.next())
-            continent = new Continent(resultSet.getInt("Id"),resultSet.getString("name"));
-        return continent;
+        EntityManager entityManager = connection.createEntityManager();
+        return entityManager.find(Continent.class , id);
     }
 
 
     public List<Continent> getAllContinents() throws SQLException {
-        Statement statement = connection.createStatement();
-        String select = "SELECT * FROM Continent;";
-        ResultSet resultSet = statement.executeQuery(select);
-        List<Continent> continentList = new ArrayList<>();
-        while (resultSet.next()){
-            Continent continent =
-                    new Continent(resultSet.getInt("Id"),resultSet.getString("name"));
-            continentList.add(continent);
-        }
-        return continentList;
+        EntityManager entityManager = connection.createEntityManager();
+        Query query = entityManager.createQuery("Select c from Continent c");
+        List<Continent> contList = query.getResultList();
+        return contList;
+
     }
 
-    public Continent getContinentByCountry(Country country) throws SQLException {
-        Statement statement = connection.createStatement();
-        String select = "SELECT * FROM Continent WHERE id = "+country.getContinentId()+";";
-        ResultSet resultSet = statement.executeQuery(select);
-        Continent continent = null;
-        while (resultSet.next())
-            continent = new Continent(resultSet.getInt("Id"),resultSet.getString("name"));
-        return continent;
+    public Continent getContinentByCountry(int country) throws SQLException {
+        EntityManager entityManager = connection.createEntityManager();
+        return entityManager.find(Continent.class , country);
+    }
+    public void addContinent(Continent continent) throws SQLException {
+        EntityManager entityManager = connection.createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(continent);
+        entityManager.getTransaction().commit();
+
+    }
+
+    public void updateContinent(Continent continent) throws SQLException {
+        EntityManager entityManager = connection.createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.merge(continent);
+        entityManager.getTransaction().commit();
+
+
+
+    }
+    public void deleteContinent(Continent continent) throws SQLException {
+        EntityManager entityManager = connection.createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.remove(continent);
+        entityManager.getTransaction().commit();
     }
 
 

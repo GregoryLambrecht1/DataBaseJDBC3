@@ -2,6 +2,7 @@ package service;
 
 import data.ContinentDAO;
 import data.CountryDAO;
+import model.Continent;
 import model.Country;
 
 import java.sql.SQLException;
@@ -61,7 +62,7 @@ public class CountryService {
         }
         System.out.println("Insert countryName");
         String countryName = scanner.next();
-        Country country = new Country(countryName,continentId);
+        Country country = new Country(countryName, continentDAO.getContinentById(continentId));
         //insert into table
         countryDAO.addCountry(country);
         System.out.println("Country was made");
@@ -100,11 +101,10 @@ public class CountryService {
         if(!answer.toUpperCase(Locale.ROOT).equals("NA")){
             System.out.println("What do you want to change it to?");
             int id = scanner.nextInt();
-            country.setContinentId(id);
 
         }
 
-        countryDAO.updateCountry(country,currentId);
+        countryDAO.updateCountry(country);
         System.out.println("Country updated");
 
     }
@@ -176,7 +176,7 @@ public class CountryService {
         int continentId = scanner.nextInt();
         System.out.println("Give me the name of the country");
         String name = scanner.next();
-        Country country = new Country(name, continentId);
+        Country country = new Country(name);
         countryDAO.addCountry(country);
         System.out.println("Country has been added");
 
@@ -198,16 +198,11 @@ public class CountryService {
         System.out.println("Change the CountryName to something new. NA if you don't want to change it.");
         answer = scanner.next();
         if (!answer.toUpperCase(Locale.ROOT).equals("NA")){
-            country.setName(answer);
+            Continent continent = continentDAO.getContinentById(Integer.parseInt(answer));
         }
 
-        System.out.println("Change the ContinentID to something new. NA if you don't want to change it.");
-        answer = scanner.next();
-        if (!answer.toUpperCase(Locale.ROOT).equals("NA")){
-            country.setContinentId(Integer.parseInt(answer));
-        }
 
-        countryDAO.updateCountry(country, currentId);
+        countryDAO.updateCountry(country);
         System.out.println("Country has been updated");
 
 
